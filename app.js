@@ -1,5 +1,5 @@
 /* =========================================================
-   ZWAWRI INCORPORATION — script.js
+   GRILVEX — script.js
 ========================================================= */
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -461,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const note = document.getElementById('messageField').value.trim();
 
     const lines = [
-      'Bonjour Zwawri Incorporation, je souhaite une demande de devis :',
+      'Bonjour GRILVEX, je souhaite une demande de devis :',
       '',
       `• Nom : ${name.value.trim()}`,
       `• Téléphone : ${phone.value.trim()}`
@@ -506,7 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
      13. WHATSAPP LINK
   --------------------------------------------------- */
   const wa = document.getElementById('whatsappFab');
-  wa.href = 'https://wa.me/212668880667?text=' + encodeURIComponent('Bonjour Zwawri, je souhaite un devis pour du grillage industriel.');
+  wa.href = 'https://wa.me/212668880667?text=' + encodeURIComponent('Bonjour GRILVEX, je souhaite un devis pour du grillage industriel.');
 
   /* ---------------------------------------------------
      14. FOOTER YEAR
