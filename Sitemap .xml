@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.grilvex.ma/</loc>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://www.grilvex.ma/#catalogue</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.grilvex.ma/#apropos</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.grilvex.ma/#contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.grilvex.ma/images/grillage-panneau-criblage-grilvex-maroc.jpeg</image:loc>
+      <image:title>Panneau de criblage et grillage métallique GRILVEX Maroc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.grilvex.ma/images/atelier-grillage-industriel-grilvex-casablanca.png</image:loc>
+      <image:title>Atelier de fabrication de grillage industriel GRILVEX Casablanca</image:title>
+    </image:image>
   </url>
 </urlset>
