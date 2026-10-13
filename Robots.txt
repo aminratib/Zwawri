@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.zwawri-incorporation.com/sitemap.xml
+Sitemap: https://www.grilvex.ma/sitemap.xml
