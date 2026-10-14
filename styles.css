@@ -469,3 +469,128 @@ h1,h2,h3,h4,p,dl,dd,figure{margin:0;}
 .modal-body > p{color:var(--steel); margin-bottom:20px;}
 .modal-specs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px;}
 .modal-specs span{font-size:.85rem; font-weight:600; border:2px solid var(--ink); padding:5px 11px;}
+
+/* =========================================================
+   RESPONSIVE TÉLÉPHONE — corrections
+========================================================= */
+html{-webkit-text-size-adjust:100%;}
+.display,.h2,.lead,.cat-card h3,.why-row h3,.faq-item summary,.modal h3{overflow-wrap:break-word; hyphens:auto;}
+.contact-card strong,.spec-strip dd,.readout-value,.footer-col a{overflow-wrap:anywhere;}
+.brand{position:relative; z-index:700;}
+.footer-word{font-size:min(15vw,17rem);}
+
+/* pas d'effets "survol" collants sur écran tactile */
+@media (hover:none){
+  .cat-card:hover{transform:none; box-shadow:none;}
+  .cat-card:hover .carousel-slide img{transform:none;}
+  .btn-orange:hover,.contact-card:hover,.whatsapp-fab:hover{transform:none;}
+  .btn-orange:hover{box-shadow:4px 4px 0 var(--ink);}
+  .contact-card:hover{box-shadow:none;}
+  .whatsapp-fab:hover{box-shadow:4px 4px 0 var(--ink);}
+}
+
+@media (max-width:980px){
+  .hero-title{max-width:none;}
+}
+
+@media (max-width:720px){
+  :root{--header-h:64px;}
+  .wrap{padding:0 20px;}
+  .nav-inner{gap:14px;}
+  .brand img{width:36px; height:36px;}
+  .brand-name{font-size:1.1rem;}
+  .burger{width:42px; height:42px;}
+
+  /* menu plein écran : défile si l'écran est court */
+  .mobile-menu{height:100vh; height:100dvh; overflow-y:auto; padding:calc(var(--header-h) + 16px) 20px 24px; gap:24px; justify-content:flex-start;}
+  .mobile-link{font-size:1.7rem; padding:12px 0;}
+  .mobile-cta{margin-top:auto;}
+
+  .section{padding:60px 0;}
+  .h2{font-size:clamp(1.75rem,8vw,2.3rem); margin-bottom:14px;}
+  .lead{font-size:1rem;}
+  .section-head{margin-bottom:28px;}
+
+  /* hero */
+  .hero-grid{padding-top:36px; padding-bottom:40px; gap:32px;}
+  .hero-kicker{font-size:.82rem; margin-bottom:20px;}
+  .hero-title{font-size:clamp(1.9rem,9vw,2.8rem); margin-bottom:20px;}
+  .hero-sub{font-size:1rem; margin-bottom:26px;}
+  .hero-actions{gap:12px;}
+  .hero-photo{display:block; aspect-ratio:4/3; max-width:none; clip-path:polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 0 100%);}
+  .hero-photo figcaption{font-size:.85rem; padding:9px 14px;}
+  .spec-strip div{padding:16px 16px;}
+  .spec-strip dt{font-size:.78rem;}
+  .spec-strip dd{font-size:1.05rem;}
+  .band{padding:13px 0;}
+  .band-track{font-size:1.15rem; gap:20px;}
+
+  /* boutons : le texte peut passer à la ligne au lieu de déborder */
+  .btn{white-space:normal; text-align:center; line-height:1.25;}
+  .btn-lg{padding:16px 20px; font-size:.95rem;}
+
+  /* catalogue : filtres défilables au doigt */
+  .filters{flex-wrap:nowrap; overflow-x:auto; margin:0 -20px 10px; padding:0 20px 8px; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+  .filters::-webkit-scrollbar{display:none;}
+  .chip{flex:0 0 auto; padding:10px 14px;}
+  .cat-card-body{padding:16px 18px 18px;}
+  .cat-card h3{font-size:1.12rem;}
+  .carousel-arrow{width:38px; height:38px;}
+
+  /* configurateur */
+  .config-controls{margin:28px 0 24px; gap:26px;}
+  .control-value{font-size:1.25rem;}
+  .config-readout{grid-template-columns:1fr;}
+  .readout-item + .readout-item{border-left:none; border-top:2px solid #27435e;}
+  .preview-frame{max-width:100%;}
+  .preview-caption{max-width:100%;}
+
+  /* pourquoi */
+  .why-row{grid-template-columns:40px 1fr; gap:16px; padding:22px 0;}
+  .why-icon{width:40px; height:40px; padding:8px;}
+  .why-row h3{font-size:1.15rem;}
+
+  /* à propos */
+  .apropos-frame{max-width:none; clip-path:polygon(40px 0, 100% 0, 100% 100%, 0 100%, 0 40px);}
+
+  /* faq */
+  .faq-item summary{font-size:1rem; padding:18px 0; gap:14px;}
+  .faq-item summary::after{width:30px; height:30px; font-size:1.2rem;}
+  .faq-item p{padding:0 0 20px;}
+
+  /* contact */
+  .contact-card{padding:14px 16px; gap:12px;}
+  .quote-form{padding:20px 16px;}
+  .form-row{gap:14px; margin-bottom:14px;}
+
+  /* pied de page */
+  .site-footer{padding-top:48px;}
+  .footer-grid{gap:30px; padding-bottom:36px;}
+  .footer-bottom{padding:18px 0 84px;}
+  .footer-bottom-inner{flex-direction:column; gap:6px;}
+  .footer-word{-webkit-text-stroke:1.5px #27435e;}
+
+  /* boutons flottants + zone sûre iPhone */
+  .whatsapp-fab{right:14px; bottom:calc(14px + env(safe-area-inset-bottom)); width:54px; height:54px;}
+  .back-to-top{right:17px; bottom:calc(80px + env(safe-area-inset-bottom)); width:44px; height:44px;}
+
+  /* fiche produit */
+  .modal-overlay{padding:12px;}
+  .modal{max-height:calc(100dvh - 24px); box-shadow:6px 6px 0 var(--orange);}
+  .modal-photo{aspect-ratio:4/3;}
+  .modal-body{padding:20px 18px 22px;}
+  .modal h3{font-size:1.35rem;}
+}
+
+/* rangées de chiffres : une colonne sur petit écran */
+@media (max-width:600px){
+  .facts{grid-template-columns:1fr;}
+  .fact + .fact{border-left:none; border-top:2px solid var(--ink);}
+  .fact strong{font-size:1.9rem;}
+}
+
+@media (max-width:380px){
+  .brand-name{font-size:1rem;}
+  .spec-strip dd{font-size:.95rem;}
+  .mobile-link{font-size:1.5rem;}
+}
