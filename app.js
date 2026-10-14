@@ -4,16 +4,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------------------------------------------------
-     0. PRELOADER
-  --------------------------------------------------- */
-  const preloader = document.getElementById('preloader');
-  window.addEventListener('load', () => {
-    setTimeout(() => preloader.classList.add('done'), 350);
-  });
-  // fallback in case load already fired
-  setTimeout(() => preloader.classList.add('done'), 2200);
-
-  /* ---------------------------------------------------
      1. HEADER SCROLL STATE
   --------------------------------------------------- */
   const header = document.getElementById('siteHeader');
@@ -66,33 +56,113 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
   };
   burger.addEventListener('click', () => toggleMenu());
-  mobileMenu.querySelectorAll('.mobile-link').forEach(link => {
+  mobileMenu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => toggleMenu(false));
   });
 
   /* ---------------------------------------------------
-     3. CURSOR GLOW (desktop)
+     4. HERO MESH CANVAS (maille vivante)
   --------------------------------------------------- */
-  const glow = document.getElementById('cursorGlow');
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    document.addEventListener('mousemove', (e) => {
-      glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-50%)`;
-      glow.classList.add('active');
-    });
-    document.addEventListener('mouseleave', () => glow.classList.remove('active'));
-  }
+  const meshCanvas = document.getElementById('meshCanvas');
+  if (meshCanvas) {
+    const hero = meshCanvas.parentElement;
+    const ctx = meshCanvas.getContext('2d');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const GAP = 34;      // espacement des fils
+    const STEP = 12;     // pas d'échantillonnage le long d'un fil
+    const RADIUS = 190;  // zone d'influence du pointeur
+    const PUSH = 30;     // déformation maximale en px
+    let W = 0, H = 0, running = false, startTime = performance.now();
+    const ptr = { x: -9999, y: -9999, tx: -9999, ty: -9999, active: false, init: false };
 
-  /* ---------------------------------------------------
-     4. HERO PHOTO CAROUSEL
-  --------------------------------------------------- */
-  const heroSlides = document.querySelectorAll('#heroCarousel .hero-slide');
-  if (heroSlides.length > 1) {
-    let heroIndex = 0;
-    setInterval(() => {
-      heroSlides[heroIndex].classList.remove('active');
-      heroIndex = (heroIndex + 1) % heroSlides.length;
-      heroSlides[heroIndex].classList.add('active');
-    }, 5000);
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = hero.clientWidth; H = hero.clientHeight;
+      meshCanvas.width = Math.round(W * dpr);
+      meshCanvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    // renvoie [x, y, force] : position déformée d'un point de la maille
+    const warp = (x, y) => {
+      const dx = x - ptr.x, dy = y - ptr.y;
+      const d = Math.hypot(dx, dy);
+      if (d >= RADIUS || d === 0) return [x, y, 0];
+      const f = Math.pow(1 - d / RADIUS, 2);
+      return [x + (dx / d) * f * PUSH, y + (dy / d) * f * PUSH, f];
+    };
+
+    const draw = (now) => {
+      ctx.clearRect(0, 0, W, H);
+      const t = reduceMotion ? 1 : Math.min((now - startTime) / 1500, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const alphaH = Math.min(eased * 2, 1);          // les fils horizontaux se posent d'abord
+      const alphaV = Math.max(eased * 2 - 1, 0);      // puis les fils verticaux
+      const hot = new Path2D();
+      const baseH = new Path2D();
+      const baseV = new Path2D();
+
+      const trace = (horizontal, base) => {
+        const lim = horizontal ? H : W, len = horizontal ? W : H;
+        for (let k = GAP / 2; k < lim; k += GAP) {
+          let prev = null;
+          for (let s = -STEP; s <= len + STEP; s += STEP) {
+            const p = horizontal ? warp(s, k) : warp(k, s);
+            if (prev) {
+              base.moveTo(prev[0], prev[1]);
+              base.lineTo(p[0], p[1]);
+              if (prev[2] > 0.04 || p[2] > 0.04) { hot.moveTo(prev[0], prev[1]); hot.lineTo(p[0], p[1]); }
+            }
+            prev = p;
+          }
+        }
+      };
+      trace(true, baseH);
+      trace(false, baseV);
+
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = 'rgba(10,34,56,' + (0.17 * alphaH) + ')';
+      ctx.stroke(baseH);
+      ctx.strokeStyle = 'rgba(10,34,56,' + (0.17 * alphaV) + ')';
+      ctx.stroke(baseV);
+      ctx.lineWidth = 2.6;
+      ctx.strokeStyle = 'rgba(255,90,31,' + (0.95 * alphaV) + ')';
+      ctx.stroke(hot);
+    };
+
+    const frame = (now) => {
+      if (!running) return;
+      if (!ptr.active) {
+        // sans pointeur (mobile, début de page) : un point de pression se promène sur la maille
+        ptr.tx = W * (0.5 + 0.32 * Math.cos(now * 0.00045));
+        ptr.ty = H * (0.5 + 0.28 * Math.sin(now * 0.0006));
+      }
+      if (!ptr.init) { ptr.x = ptr.tx; ptr.y = ptr.ty; ptr.init = true; }
+      ptr.x += (ptr.tx - ptr.x) * 0.12;
+      ptr.y += (ptr.ty - ptr.y) * 0.12;
+      draw(now);
+      requestAnimationFrame(frame);
+    };
+
+    resize();
+    window.addEventListener('resize', () => { resize(); if (!running) draw(performance.now()); });
+
+    if (reduceMotion) {
+      draw(performance.now());
+    } else {
+      hero.addEventListener('pointermove', (e) => {
+        const r = hero.getBoundingClientRect();
+        ptr.tx = e.clientX - r.left; ptr.ty = e.clientY - r.top; ptr.active = true;
+        if (!ptr.init) { ptr.x = ptr.tx; ptr.y = ptr.ty; ptr.init = true; }
+      });
+      hero.addEventListener('pointerleave', () => { ptr.active = false; });
+      new IntersectionObserver((entries) => {
+        const on = entries[0].isIntersecting;
+        if (on && !running) { running = true; requestAnimationFrame(frame); }
+        else if (!on) { running = false; }
+      }, { threshold: 0 }).observe(hero);
+    }
   }
 
   /* ---------------------------------------------------
@@ -217,10 +287,25 @@ document.addEventListener('DOMContentLoaded', () => {
     goTo(0);
   }
 
+  const GROUPS = [
+    { id: 'all', label: 'Tout' },
+    { id: 'criblage', label: 'Criblage', names: ['Panneaux de Criblage', 'Panneaux de Criblage en Polyuréthane', 'Grillage Ondulé Galvanisé', 'Grillage Ondulé Inox', 'Grillage Ondulé', 'Grillage Ondulé Noir', 'Rouleau de grillage ondulé HR', 'Rouleau de grillage ondulé inox', 'Joints de Crible'] },
+    { id: 'grillages', label: 'Grillages et clôtures', names: ['Grillage en Inox', 'Grillage Simple Torsion Galvanisé', 'Grillage Simple Torsion Plastifié Vert', 'Grillage Métallique en Acier Galvanisé', 'Panneau Grillage Rigide', 'Treillis Soudés', 'Métal Déployé', 'Caillebotis'] },
+    { id: 'convoyage', label: 'Convoyage', names: ['Tambour Convoyeur', 'Rouleaux pour Convoyeur', 'Bande transporteuse', 'Fixation de Plaque pour Connecter les Bandes', 'Réducteur - Moteur', 'Colle Forbo Helmitin® 1430', 'Swift®prime 2903', 'Ultraflex™ 56'] },
+    { id: 'pieces', label: 'Concassage et pièces', names: ['Mâchoire', 'Cône', 'Ressort', 'Boulons & Fixations'] },
+    { id: 'metaux', label: 'Métaux', names: ['Tous Types de Fer', 'Inox', 'Bobine de tôle acier'] }
+  ];
+  const groupOf = (name) => {
+    const g = GROUPS.find(gr => gr.names && gr.names.includes(name.trim()));
+    return g ? g.id : 'criblage';
+  };
+
+  const cards = [];
   categories.forEach((cat, i) => {
-    const card = document.createElement('div');
-    card.className = 'cat-card reveal';
-    card.style.transitionDelay = `${(i % 4) * 0.06}s`;
+    const card = document.createElement('article');
+    card.className = 'cat-card' + (i === 0 ? ' is-feature' : '');
+    card.dataset.group = groupOf(cat.name);
+    card.tabIndex = 0;
     card.innerHTML = `
       <div class="cat-card-photo">
         ${buildCarouselHTML(cat.imgs, cat.name, 'carousel-card')}
@@ -234,8 +319,35 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     initCarousel(card);
     card.addEventListener('click', () => openModal(cat));
+    card.addEventListener('keydown', (e) => {
+      if (e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openModal(cat); }
+    });
     catGrid.appendChild(card);
+    cards.push(card);
   });
+
+  const catFilters = document.getElementById('catFilters');
+  const catCount = document.getElementById('catCount');
+  const applyFilter = (id) => {
+    let n = 0;
+    cards.forEach(c => {
+      const show = id === 'all' || c.dataset.group === id;
+      c.hidden = !show;
+      if (show) n++;
+    });
+    catCount.textContent = n + (n > 1 ? ' produits' : ' produit');
+    catFilters.querySelectorAll('.chip').forEach(ch => ch.setAttribute('aria-pressed', ch.dataset.id === id ? 'true' : 'false'));
+  };
+  GROUPS.forEach(g => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.dataset.id = g.id;
+    b.textContent = g.label;
+    b.addEventListener('click', () => applyFilter(g.id));
+    catFilters.appendChild(b);
+  });
+  applyFilter('all');
 
   /* ---------------------------------------------------
      6. PRODUCT MODAL
@@ -297,68 +409,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ---------------------------------------------------
-     7. WEAVE GALLERY (bibliothèque de tissages)
+     7. NAV : lien de la section en cours
   --------------------------------------------------- */
-  const weaves = [
-    { label: 'Tissage Toile', tag: 'Fin – filtration', img: 'https://images.unsplash.com/photo-1648583189779-536c76a17957?auto=format&fit=crop&w=600&q=70' },
-    { label: 'Torsion Simple', tag: 'Losange – clôture', img: 'https://images.unsplash.com/photo-1517265598349-76511a2fb389?auto=format&fit=crop&w=600&q=70' },
-    { label: 'Ondulé Renforcé', tag: 'Lourd – criblage', img: 'https://images.unsplash.com/photo-1605455861849-0ff83304ac44?auto=format&fit=crop&w=600&q=70' },
-    { label: 'Soudé Rigide', tag: 'Carré – structure', img: 'https://images.unsplash.com/photo-1550531500-e4182793ff06?auto=format&fit=crop&w=600&q=70' }
-  ];
-  const weaveGallery = document.getElementById('weaveGallery');
-  weaves.forEach((w, i) => {
-    const tile = document.createElement('div');
-    tile.className = 'weave-tile reveal';
-    tile.style.transitionDelay = `${i * 0.08}s`;
-    tile.innerHTML = `
-      <div class="weave-swatch"><img src="${w.img}" alt="${w.label}" loading="lazy"></div>
-      <div class="weave-tile-label"><strong>${w.label}</strong><span>${w.tag}</span></div>
-    `;
-    weaveGallery.appendChild(tile);
+  const navLinks = Array.from(document.querySelectorAll('.main-nav .nav-link'));
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.toggle('current', l.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  navLinks.forEach(l => {
+    const target = document.querySelector(l.getAttribute('href'));
+    if (target) spy.observe(target);
   });
-
-  /* ---------------------------------------------------
-     8. STATS COUNTER
-  --------------------------------------------------- */
-  const statNums = document.querySelectorAll('.stat-num');
-  const animateCount = (el) => {
-    const target = parseInt(el.dataset.count, 10);
-    const duration = 1400;
-    const start = performance.now();
-    function tick(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target);
-      if (progress < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  };
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCount(entry.target);
-        statsObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  statNums.forEach(el => statsObserver.observe(el));
-
-  /* ---------------------------------------------------
-     9. SCROLL REVEAL
-  --------------------------------------------------- */
-  const revealTargets = document.querySelectorAll(
-    '.reveal, .section-head, .why-card, .stat-card, .apropos-copy, .apropos-visual, .contact-intro, .quote-form, .config-intro, .config-preview'
-  );
-  revealTargets.forEach(el => el.classList.add('reveal'));
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  revealTargets.forEach(el => revealObserver.observe(el));
 
   /* ---------------------------------------------------
      10. MESH CONFIGURATOR
@@ -410,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let c = -1; c <= cellsAcross; c++) {
         const cx = c * cell + cell / 2;
         const cy = r * cell + cell / 2;
-        svg += `<rect x="${cx - openPx/2}" y="${cy - openPx/2}" width="${openPx}" height="${openPx}" fill="rgba(13,132,214,0.08)" stroke="#0D84D6" stroke-width="${wirePx}"></rect>`;
+        svg += `<rect x="${cx - openPx/2}" y="${cy - openPx/2}" width="${openPx}" height="${openPx}" fill="rgba(255,90,31,0.14)" stroke="#0A2238" stroke-width="${wirePx}"></rect>`;
       }
     }
     svg += `</g>`;
@@ -425,8 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('wireField').value = parseFloat(wireRange.value).toFixed(1);
     document.getElementById('openField').value = parseFloat(openRange.value).toFixed(0);
     document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    const form = document.getElementById('quoteForm');
-    form.classList.add('reveal', 'in');
     setTimeout(() => document.getElementById('nameField').focus(), 700);
   });
 
@@ -479,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formSuccess.classList.add('show');
       formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       window.open(waUrl, '_blank', 'noopener');
-      submitBtn.querySelector('.btn-text').textContent = 'Obtenir mon devis';
+      submitBtn.querySelector('.btn-text').textContent = 'Envoyer ma demande sur WhatsApp';
       submitBtn.disabled = false;
       quoteForm.reset();
       setSelectedProduct('');
@@ -498,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const original = input.placeholder;
     input.value = '';
     input.placeholder = 'Merci, à bientôt !';
-    btn.style.background = '#0D84D6';
+    btn.style.background = '#ffffff';
     setTimeout(() => { input.placeholder = original; }, 3500);
   });
 

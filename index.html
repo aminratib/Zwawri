@@ -39,7 +39,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="icon" href="logo-mark.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="64x64">
@@ -127,193 +127,109 @@
   ]
 }
 </script>
-<style>
-/* SEO helpers */
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.faq-list{max-width:860px;margin:32px auto 0;display:grid;gap:12px}
-.faq-item{border:1px solid rgba(1,70,112,.18);border-radius:12px;background:#fff;padding:0 20px}
-.faq-item summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;color:#014670;display:flex;justify-content:space-between;gap:16px;align-items:center}
-.faq-item summary::-webkit-details-marker{display:none}
-.faq-item summary::after{content:"+";font-size:1.5rem;color:#e9512a;line-height:1}
-.faq-item[open] summary::after{content:"–"}
-.faq-item p{margin:0 0 18px;color:#334;line-height:1.65}
-</style>
 </head>
 <body>
 
-<!-- ============ CURSOR GLOW (desktop only, decorative) ============ -->
-<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-
-<!-- ============ PRELOADER ============ -->
-<div class="preloader" id="preloader" aria-hidden="true">
-  <svg class="preloader-weave" viewBox="0 0 120 120" width="72" height="72">
-    <polygon points="60,4 116,60 60,116 4,60" fill="none" stroke="#014670" stroke-width="3" stroke-linejoin="round" class="weave-shape weave-1"/>
-    <polygon points="60,26 94,60 60,94 26,60" fill="none" stroke="#e9512a" stroke-width="3" stroke-linejoin="round" class="weave-shape weave-2"/>
-  </svg>
-</div>
+<a href="#catalogue" class="sr-only">Aller au catalogue</a>
 
 <!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
-  <div class="topbar">
-    <div class="wrap topbar-inner">
-      <div class="topbar-contacts">
-         <a href="tel:+212668880667"><svg class="ic" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.6c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg><span>+212 668 880 667</span></a>
-        <a href="mailto:contact@grilvex.com"><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 2v.4l8 5.6 8-5.6V6H4zm16 2.4-7.4 5.2a1 1 0 0 1-1.2 0L4 8.4V18h16V8.4z"/></svg><span>contact@grilvex.com</span></a>
-      </div>
-      <div class="topbar-social" aria-label="Réseaux sociaux">
-         </div>
-    </div>
-  </div>
+  <div class="wrap nav-inner">
+    <a href="#home" class="brand" aria-label="GRILVEX — Accueil">
+      <img src="logo-mark.svg" width="42" height="42" alt="">
+      <span class="brand-name">GRILVEX</span>
+    </a>
 
-  <div class="navbar">
-    <div class="wrap navbar-inner">
-      <a href="#home" class="brand" aria-label="GRILVEX — Accueil">
-        <span class="brand-fallback" id="brandFallback">
-          <img src="logo-mark.svg" width="46" height="46" alt="">
-          <span class="brand-text">
-            <strong>GRILVEX</strong>
-            <em>GRILLAGE &amp; CRIBLAGE</em>
-          </span>
-        </span>
-      </a>
-
-      <nav class="main-nav" id="mainNav" aria-label="Navigation principale">
-        <a href="#home" class="nav-link">Accueil</a>
-        <a href="#catalogue" class="nav-link">Catalogue</a>
-        <a href="#configurateur" class="nav-link">Configurateur</a>
-        <a href="#apropos" class="nav-link">À propos</a>
-        <a href="#realisations" class="nav-link">Tissages</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </nav>
-
-      <div class="navbar-cta">
-        <a href="#contact" class="btn btn-primary btn-sm">Demander un devis</a>
-        <button class="burger" id="burgerBtn" aria-label="Ouvrir le menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mobile fullscreen menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <nav aria-label="Navigation mobile">
-      <a href="#home" class="mobile-link">01 · Accueil</a>
-      <a href="#catalogue" class="mobile-link">02 · Catalogue</a>
-      <a href="#configurateur" class="mobile-link">03 · Configurateur</a>
-      <a href="#apropos" class="mobile-link">04 · À propos</a>
-      <a href="#realisations" class="mobile-link">05 · Tissages</a>
-      <a href="#contact" class="mobile-link">06 · Contact</a>
+    <nav class="main-nav" id="mainNav" aria-label="Navigation principale">
+      <a href="#catalogue" class="nav-link">Catalogue</a>
+      <a href="#configurateur" class="nav-link">Configurateur</a>
+      <a href="#pourquoi" class="nav-link">Pourquoi nous</a>
+      <a href="#apropos" class="nav-link">À propos</a>
+      <a href="#faq" class="nav-link">Questions</a>
+      <a href="#contact" class="nav-link">Contact</a>
     </nav>
 
+    <div class="nav-right">
+      <a href="tel:+212668880667" class="nav-tel">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.6c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+        +212 668 880 667
+      </a>
+      <a href="#contact" class="btn btn-orange btn-sm">Demander un devis</a>
     </div>
+
+    <button class="burger" id="burgerBtn" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <nav aria-label="Navigation mobile">
+      <a href="#catalogue" class="mobile-link">Catalogue</a>
+      <a href="#configurateur" class="mobile-link">Configurateur</a>
+      <a href="#pourquoi" class="mobile-link">Pourquoi nous</a>
+      <a href="#apropos" class="mobile-link">À propos</a>
+      <a href="#faq" class="mobile-link">Questions</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </nav>
+    <div class="mobile-cta">
+      <a href="#contact" class="btn btn-orange btn-lg mobile-link-cta">Demander un devis</a>
+      <a href="tel:+212668880667" class="btn btn-line btn-lg">+212 668 880 667</a>
+    </div>
+  </div>
 </header>
 
 <main>
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="home">
-  <div class="hero-bg" aria-hidden="true">
-    <div class="hero-carousel" id="heroCarousel">
-      <div class="hero-slide active" style="background-image:url('https://www.thp.ma/wp-content/uploads/2020/03/Slide-bande-transporteuses-2-1140.jpg')"></div>
-      </div>
-    <div class="hero-glow"></div>
-  </div>
+  <canvas class="hero-canvas" id="meshCanvas" aria-hidden="true"></canvas>
 
-  <div class="wrap hero-inner">
+  <div class="wrap hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow"><span class="eyebrow-dot"></span> GRILVEX — fabricant de grillage &amp; criblage à Casablanca</p>
-      <h1 class="hero-title">Grillage &amp; criblage au Maroc<span class="hl"> toutes les mailles disponibles.</span></h1>
-      <p class="hero-sub">Fondée en 2011, la société GRILVEX  s'impose comme un leader industriel au Maroc et en Afrique.
-
-Activités clés : Importation et distribution de bandes transporteuses, feuilles de caoutchouc et bandes PVC, ainsi que fabrication de grillages métalliques et panneaux de criblage pour cribles.
-
-Engagement client : Recherche permanente de la satisfaction client grâce à des installations de haute technologie, des coûts optimisés et une qualité irréprochable.
-
-Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissant le respect strict des normes de sécurité et de qualité.</p>
-
+      <p class="hero-kicker">Fabricant à Casablanca, zone industrielle de Tit Mellil</p>
+      <h1 class="display hero-title">Grillage et criblage au Maroc. Toutes les mailles disponibles.</h1>
+      <p class="hero-sub">Depuis 2011, GRILVEX fabrique des grillages métalliques et des panneaux de criblage sur mesure, et distribue des bandes transporteuses pour les mines, carrières et cimenteries du Maroc et d'Afrique.</p>
       <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary btn-lg">
+        <a href="#contact" class="btn btn-orange btn-lg">
           Demander un devis
           <svg viewBox="0 0 24 24" class="ic"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a href="#catalogue" class="btn btn-ghost btn-lg">Voir le catalogue</a>
-      </div>
-
-      <div class="hero-specs" role="list">
-        <div class="spec-item" role="listitem">
-          <span class="spec-label">Ø fil</span>
-          <span class="spec-value">0.5 – 12 mm</span>
-        </div>
-        <div class="spec-div" aria-hidden="true"></div>
-        <div class="spec-item" role="listitem">
-          <span class="spec-label">Ouverture maille</span>
-          <span class="spec-value">1 – 100 mm</span>
-        </div>
-        <div class="spec-div" aria-hidden="true"></div>
-        <div class="spec-item" role="listitem">
-          <span class="spec-label">Largeur toile</span>
-          <span class="spec-value">jusqu'à 2.1 m</span>
-        </div>
-        <div class="spec-div" aria-hidden="true"></div>
-        <div class="spec-item" role="listitem">
-          <span class="spec-label">Production</span>
-          <span class="spec-value">express 48h</span>
-        </div>
+        <a href="#catalogue" class="btn btn-line btn-lg">Voir le catalogue</a>
       </div>
     </div>
 
-    <div class="hero-visual">
-      <div class="mesh-card">
-        <div class="mesh-grid">
-          <img src="images/grillage-panneau-criblage-grilvex-maroc.jpeg" alt="Panneau de criblage et grillage métallique tissé GRILVEX Maroc" fetchpriority="high" decoding="async">
-        </div>
-        <div class="mesh-card-tag">Panneaux de Criblage</div>
-      </div>
-      <div class="floating-chip chip-1">
-        <svg class="ic" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        Panneaux de Criblage
-      </div>
-      <div class="floating-chip chip-2">
-        <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-        Contrôle qualité 100%
-      </div>
-    </div>
+    <figure class="hero-photo">
+      <img src="images/grillage-panneau-criblage-grilvex-maroc.jpeg" alt="Panneau de criblage et grillage métallique tissé GRILVEX Maroc" fetchpriority="high" decoding="async">
+      <figcaption>Panneaux de criblage</figcaption>
+    </figure>
   </div>
 
-  <div class="scroll-cue" aria-hidden="true">
-    <span>Défiler</span>
-    <div class="scroll-cue-line"><i></i></div>
-  </div>
+  <dl class="spec-strip">
+    <div><dt>Diamètre du fil</dt><dd>0,5 à 12 mm</dd></div>
+    <div><dt>Ouverture de maille</dt><dd>1 à 100 mm</dd></div>
+    <div><dt>Largeur de toile</dt><dd>jusqu'à 2,1 m</dd></div>
+    <div><dt>Production express</dt><dd>48 h</dd></div>
+  </dl>
 </section>
 
-<!-- ============ SECTORS MARQUEE ============ -->
-<section class="marquee-section" aria-label="Secteurs desservis">
-  <div class="marquee">
-    <div class="marquee-track" id="marqueeTrack">
-      <span>Mines</span><span class="dot">◆</span>
-      <span>Carrières</span><span class="dot">◆</span>
-      <span>Cimenteries</span><span class="dot">◆</span>
-      <span>BTP</span><span class="dot">◆</span>
-      <span>Agroalimentaire</span><span class="dot">◆</span>
-      <span>Filtration industrielle</span><span class="dot">◆</span>
-      <span>Recyclage</span><span class="dot">◆</span>
-      <span>Traitement des eaux</span><span class="dot">◆</span>
-    </div>
+<!-- ============ BANDEAU SECTEURS ============ -->
+<section class="band" aria-label="Secteurs desservis">
+  <div class="band-track" aria-hidden="false">
+    <span>Mines</span><i>+</i><span>Carrières</span><i>+</i><span>Cimenteries</span><i>+</i><span>BTP</span><i>+</i><span>Agroalimentaire</span><i>+</i><span>Filtration industrielle</span><i>+</i><span>Recyclage</span><i>+</i><span>Traitement des eaux</span><i>+</i>
+    <span aria-hidden="true">Mines</span><i aria-hidden="true">+</i><span aria-hidden="true">Carrières</span><i aria-hidden="true">+</i><span aria-hidden="true">Cimenteries</span><i aria-hidden="true">+</i><span aria-hidden="true">BTP</span><i aria-hidden="true">+</i><span aria-hidden="true">Agroalimentaire</span><i aria-hidden="true">+</i><span aria-hidden="true">Filtration industrielle</span><i aria-hidden="true">+</i><span aria-hidden="true">Recyclage</span><i aria-hidden="true">+</i><span aria-hidden="true">Traitement des eaux</span><i aria-hidden="true">+</i>
   </div>
 </section>
-
-<!-- ============ STATS ============ -->
-
 
 <!-- ============ CATALOGUE ============ -->
 <section class="section catalogue" id="catalogue">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow eyebrow-dark"><span class="eyebrow-dot"></span> Catalogue</p>
-      <h2 class="section-title">Grillages métalliques &amp; panneaux de criblage,<br>toute la gamme en un seul endroit.</h2>
-      <p class="section-sub">Du grillage tissé (toile métallique) et du treillis soudé aux panneaux de criblage lourds pour mines, carrières et cimenteries : chaque produit GRILVEX est disponible en acier carbone, galvanisé, inox ou polyuréthane, taillé à vos dimensions au Maroc.</p>
+      <h2 class="h2">Grillages métalliques et panneaux de criblage, toute la gamme.</h2>
+      <p class="lead">Du grillage tissé et du treillis soudé aux panneaux de criblage pour mines, carrières et cimenteries : acier carbone, galvanisé, inox ou polyuréthane, coupé à vos dimensions.</p>
     </div>
+
+    <div class="filters" id="catFilters" role="group" aria-label="Filtrer le catalogue"><!-- injected by JS --></div>
+    <p class="cat-count" id="catCount" aria-live="polite"></p>
 
     <div class="cat-grid" id="catGrid"><!-- injected by JS --></div>
   </div>
@@ -321,148 +237,161 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
 
 <!-- ============ CONFIGURATEUR ============ -->
 <section class="section configurateur" id="configurateur">
-  <div class="wrap">
-    <div class="config-layout">
-      <div class="config-intro">
-        <p class="eyebrow"><span class="eyebrow-dot"></span> Outil interactif</p>
-        <h2 class="section-title section-title-light">Configurez votre<br>maille en direct.</h2>
-        <p class="section-sub section-sub-light">Ajustez le diamètre du fil et l'ouverture de maille : l'aperçu et le taux de surface libre se recalculent instantanément. Envoyez la configuration directement dans votre demande de devis.</p>
+  <div class="wrap config-layout">
+    <div class="config-intro">
+      <h2 class="h2">Dessinez votre maille, voyez le résultat.</h2>
+      <p class="lead">Réglez le diamètre du fil et l'ouverture : l'aperçu et le taux de surface libre se recalculent tout de suite. Envoyez la configuration dans votre demande de devis.</p>
 
-        <div class="config-controls">
-          <div class="control">
-            <div class="control-label">
-              <span>Diamètre du fil (Ø)</span>
-              <span class="control-value" id="wireVal">3.0 mm</span>
-            </div>
-            <input type="range" min="1.5" max="12" step="0.5" value="3" id="wireRange" class="range">
+      <div class="config-controls">
+        <div class="control">
+          <div class="control-label">
+            <label for="wireRange">Diamètre du fil (Ø)</label>
+            <span class="control-value" id="wireVal">3.0 mm</span>
           </div>
-          <div class="control">
-            <div class="control-label">
-              <span>Ouverture de maille</span>
-              <span class="control-value" id="openVal">15 mm</span>
-            </div>
-            <input type="range" min="2" max="100" step="1" value="15" id="openRange" class="range">
-          </div>
+          <input type="range" min="1.5" max="12" step="0.5" value="3" id="wireRange" class="range">
         </div>
-
-        <div class="config-readout">
-          <div class="readout-item">
-            <span class="readout-label">Surface libre</span>
-            <span class="readout-value" id="freeArea">69.0%</span>
+        <div class="control">
+          <div class="control-label">
+            <label for="openRange">Ouverture de maille</label>
+            <span class="control-value" id="openVal">15 mm</span>
           </div>
-          <div class="readout-item">
-            <span class="readout-label">Usage recommandé</span>
-            <span class="readout-value" id="useCase">Criblage moyen / concassage</span>
-          </div>
+          <input type="range" min="2" max="100" step="1" value="15" id="openRange" class="range">
         </div>
-
-        <button class="btn btn-primary btn-lg" id="configToQuote">
-          Demander ce devis
-          <svg viewBox="0 0 24 24" class="ic"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
       </div>
 
-      <div class="config-preview">
-        <div class="preview-frame">
-          <svg id="configSvg" viewBox="0 0 320 320" class="preview-svg"></svg>
+      <div class="config-readout">
+        <div class="readout-item">
+          <span class="readout-label">Surface libre</span>
+          <span class="readout-value" id="freeArea">69.0%</span>
         </div>
-        <p class="preview-caption">Aperçu à l'échelle relative — 1 module de maille</p>
+        <div class="readout-item">
+          <span class="readout-label">Usage recommandé</span>
+          <span class="readout-value" id="useCase">Criblage moyen / concassage</span>
+        </div>
       </div>
+
+      <button class="btn btn-orange btn-lg" id="configToQuote" type="button">
+        Demander ce devis
+        <svg viewBox="0 0 24 24" class="ic"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+
+    <div class="config-preview">
+      <div class="preview-frame">
+        <svg id="configSvg" viewBox="0 0 320 320" class="preview-svg" role="img" aria-label="Aperçu de la maille configurée"></svg>
+      </div>
+      <p class="preview-caption">Aperçu à l'échelle relative.</p>
     </div>
   </div>
 </section>
 
-<!-- ============ WHY US ============ -->
+<!-- ============ POURQUOI ============ -->
 <section class="section why" id="pourquoi">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow eyebrow-dark"><span class="eyebrow-dot"></span> Pourquoi GRILVEX</p>
-      <h2 class="section-title">Conçu pour tenir<br>la charge industrielle.</h2>
+  <div class="wrap why-layout">
+    <div class="why-intro">
+      <h2 class="h2">Conçu pour tenir la charge industrielle.</h2>
+      <p class="lead">Une machine à l'arrêt coûte cher. Nous fabriquons et livrons pour que vos cribles tournent.</p>
     </div>
 
-    <div class="why-grid">
-      <div class="why-card">
+    <div class="why-list">
+      <div class="why-row">
         <svg class="why-icon" viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 3.8 9.4 9 10 5.2-.6 9-5 9-10V6l-9-4z"/></svg>
-        <h3>Robustesse</h3>
-        <p>Fils tréfilés haute résistance et tissage contrôlé : nos grilles encaissent l'impact et l'abrasion sans faiblir.</p>
+        <div>
+          <h3>Robustesse</h3>
+          <p>Fils tréfilés haute résistance et tissage contrôlé : nos grilles encaissent l'impact et l'abrasion sans faiblir.</p>
+        </div>
       </div>
-      <div class="why-card">
+      <div class="why-row">
         <svg class="why-icon" viewBox="0 0 24 24"><path d="M12 21c-4.4-2.4-8-6.6-8-11.6V5l8-3 8 3v4.4C20 14.4 16.4 18.6 12 21z"/><path d="M8.5 12l2.5 2.5 4.5-4.5"/></svg>
-        <h3>Traçabilité qualité</h3>
-        <p>Chaque lot est contrôlé : diamètre, ouverture, résistance à la traction. Zéro surprise sur site.</p>
+        <div>
+          <h3>Qualité contrôlée</h3>
+          <p>Chaque lot est contrôlé : diamètre, ouverture, résistance à la traction. Zéro surprise sur site.</p>
+        </div>
       </div>
-      <div class="why-card">
+      <div class="why-row">
         <svg class="why-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <h3>Réactivité urgences</h3>
-        <p>Une machine à l'arrêt coûte cher. Notre stock et notre atelier répondent aux commandes urgentes sous 48h.</p>
+        <div>
+          <h3>Réponse rapide aux urgences</h3>
+          <p>Notre stock et notre atelier traitent les commandes urgentes sous 48 h.</p>
+        </div>
       </div>
-      <div class="why-card">
+      <div class="why-row">
         <svg class="why-icon" viewBox="0 0 24 24"><path d="M4 21v-6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v6"/><circle cx="12" cy="7" r="4"/></svg>
-        <h3>Sur mesure, humain</h3>
-        <p>Un interlocuteur technique dédié pour chaque dossier — pas de standard automatisé, une vraie équipe métallurgiste.</p>
+        <div>
+          <h3>Sur mesure, avec un interlocuteur dédié</h3>
+          <p>Un technicien suit chaque dossier : pas de standard automatisé, une vraie équipe de métier.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ ABOUT ============ -->
+<!-- ============ À PROPOS ============ -->
 <section class="section apropos" id="apropos">
   <div class="wrap apropos-layout">
-    <div class="apropos-visual">
-      <div class="apropos-frame">
-        <img src="images/atelier-grillage-industriel-grilvex-casablanca.png" alt="Atelier de fabrication de grillage industriel GRILVEX à Casablanca" loading="lazy" decoding="async">
-      </div>
-      <div class="apropos-badge">
-        <strong>100%</strong>
-        <span>Contrôle qualité en atelier</span>
-      </div>
+    <div class="apropos-frame">
+      <img src="images/atelier-grillage-industriel-grilvex-casablanca.png" alt="Atelier de fabrication de grillage industriel GRILVEX à Casablanca" loading="lazy" decoding="async">
     </div>
     <div class="apropos-copy">
-      <p class="eyebrow eyebrow-dark"><span class="eyebrow-dot"></span> À propos de GRILVEX </p>
-      <h2 class="section-title">Une équipe qui tisse<br>la fiabilité, fil après fil.</h2>
-      <p class="section-sub"><strong>GRILVEX est la nouvelle marque de.</strong> Même activité, même expertise, désormais sous un nom unique : GRILVEX, fabricant de grillage et de criblage au Maroc.</p>
-      <p class="section-sub">GRILVEX est spécialisée dans la fabrication et la distribution de grillages métalliques pour crible et de leurs composants complémentaires : structures, joints, tambours et bandes de convoyage.</p>
-      <p class="section-sub">Le grillage en fils d'acier tissés — aussi appelé toile métallique — reste la solution la plus utilisée dans le traitement des agrégats et l'exploitation minière : grande ouverture utile, précision de tissage et excellent rapport coût / performance.</p>
+      <h2 class="h2">Une équipe qui tisse la fiabilité, fil après fil.</h2>
+      <p class="lead"><strong>GRILVEX est la nouvelle marque de l'ancienne société.</strong> Même activité, même expertise, sous un nom unique : fabricant de grillage et de criblage au Maroc.</p>
+      <p class="lead">Nous fabriquons et distribuons des grillages métalliques pour cribles et leurs composants : structures, joints, tambours et bandes de convoyage. Le grillage en fils d'acier tissés reste la solution la plus utilisée pour les agrégats et l'exploitation minière : grande ouverture utile, tissage précis, excellent rapport coût / performance.</p>
 
-      <div class="apropos-list">
-        <div class="apropos-list-item">
-          <svg class="ic" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-          Acier carbone, galvanisé, inox et polyuréthane
-        </div>
-        <div class="apropos-list-item">
-          <svg class="ic" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-          Diamètre de fil de 1.5 à 12 mm
-        </div>
-        <div class="apropos-list-item">
-          <svg class="ic" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-          Découpe et pliage sur mesure selon plan
-        </div>
+      <div class="facts">
+        <div class="fact"><strong>2011</strong><span>Année de fondation</span></div>
+        <div class="fact"><strong>24 h</strong><span>Devis sous 24 h ouvrées</span></div>
+        <div class="fact"><strong>48 h</strong><span>Production express</span></div>
       </div>
 
-      <a href="#contact" class="btn btn-outline-dark">Discuter de mon projet</a>
+      <ul class="apropos-list">
+        <li><svg class="ic" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Acier carbone, galvanisé, inox et polyuréthane</li>
+        <li><svg class="ic" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Diamètre de fil de 1,5 à 12 mm</li>
+        <li><svg class="ic" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Découpe et pliage sur mesure selon plan</li>
+      </ul>
+
+      <a href="#contact" class="btn btn-line">Discuter de mon projet</a>
     </div>
   </div>
 </section>
 
-<section class="section realisations" id="realisations">
-  <div class="wrap">
-    <div class="section-head">
-      <h2 class="sr-only">Tissages et mailles de grillage réalisés par GRILVEX</h2>
+<!-- ============ FAQ ============ -->
+<section class="section faq" id="faq">
+  <div class="wrap faq-layout">
+    <div>
+      <h2 class="h2">Vos questions, nos réponses.</h2>
+      <p class="lead">Délais, matériaux, secteurs : l'essentiel avant de demander un devis.</p>
     </div>
-
-    <div class="weave-gallery" id="weaveGallery"><!-- injected by JS --></div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>GRILVEX est-il la nouvelle marque d'une autre société ?</summary>
+        <p>Oui. Notre savoir-faire en fabrication de grillages pour cribles, panneaux de criblage et distribution de bandes transporteuses reste le même, désormais sous le nom GRILVEX et sur le site grilvex.ma.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Quels types de grillage et de panneaux de criblage fabriquez-vous ?</summary>
+        <p>Des grillages tissés (toile métallique), des treillis soudés et des panneaux de criblage en acier carbone, acier galvanisé, inox ou polyuréthane, avec diamètre de fil et ouverture de maille sur mesure, ainsi que découpe et pliage selon plan.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Quel est le délai de devis et de fabrication ?</summary>
+        <p>Nous établissons un devis sous 24 h ouvrées et assurons une production express sous 48 h pour les commandes urgentes.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Quels secteurs servez-vous au Maroc ?</summary>
+        <p>Les mines, carrières, cimenteries, le BTP, l'agroalimentaire, la filtration industrielle, le recyclage et le traitement des eaux.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Où êtes-vous situés et comment demander un devis ?</summary>
+        <p>Nous sommes en zone industrielle de Tit Mellil, à Casablanca. Demandez un devis gratuit avec le formulaire du site, par WhatsApp ou par téléphone au +212 668 880 667.</p>
+      </details>
+    </div>
   </div>
 </section>
-
-
 
 <!-- ============ CONTACT / DEVIS ============ -->
 <section class="section contact" id="contact">
   <div class="wrap contact-layout">
     <div class="contact-intro">
-      <p class="eyebrow eyebrow-dark"><span class="eyebrow-dot"></span> Devis gratuit</p>
-      <h2 class="section-title">Demandez votre devis<br>grillage &amp; criblage.</h2>
-      <p class="section-sub">Renseignez vos dimensions, on revient vers vous avec un chiffrage sous 24h ouvrées.</p>
+      <h2 class="h2">Demandez votre devis grillage et criblage.</h2>
+      <p class="lead">Indiquez vos dimensions : nous revenons vers vous avec un chiffrage sous 24 h ouvrées.</p>
 
       <div class="contact-cards">
         <a href="tel:+212668880667" class="contact-card">
@@ -474,7 +403,7 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
           <div><span>Email</span><strong>contact@grilvex.com</strong></div>
         </a>
         <a href="https://www.google.com/maps/search/?api=1&amp;query=GRILVEX+Zone+industrielle+Tit+Mellil+Casablanca" class="contact-card" target="_blank" rel="noopener">
-          <svg class="ic" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.5 5.2L2 22l4.9-1.4A9.9 9.9 0 0 0 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+          <svg class="ic" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
           <div><span>Casablanca</span><strong>Zone industrielle Tit Mellil</strong></div>
         </a>
       </div>
@@ -512,28 +441,28 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
       <div class="form-row">
         <div class="field">
           <label for="nameField">Nom complet</label>
-          <input type="text" id="nameField" placeholder="Votre nom" required>
+          <input type="text" id="nameField" placeholder="Votre nom" required autocomplete="name">
         </div>
         <div class="field">
           <label for="phoneField">Téléphone</label>
-          <input type="tel" id="phoneField" placeholder="+212 6XX XXX XXX" required>
+          <input type="tel" id="phoneField" placeholder="+212 6XX XXX XXX" required autocomplete="tel">
         </div>
       </div>
       <div class="field field-full">
-        <label for="messageField">Message (optionnel)</label>
-        <textarea id="messageField" rows="3" placeholder="Précisez le matériau, la quantité, le délai souhaité..."></textarea>
+        <label for="messageField">Message (facultatif)</label>
+        <textarea id="messageField" rows="3" placeholder="Matériau, quantité, délai souhaité..."></textarea>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-lg btn-block" id="submitBtn">
-        <span class="btn-text">Obtenir mon devis</span>
+      <button type="submit" class="btn btn-orange btn-lg btn-block" id="submitBtn">
+        <span class="btn-text">Envoyer ma demande sur WhatsApp</span>
         <svg viewBox="0 0 24 24" class="ic"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
 
       <div class="form-success" id="formSuccess" role="status">
         <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l2.5 2.5L16 9"/></svg>
         <div>
-          <strong>Demande préparée !</strong>
-          <span>Vous êtes redirigé vers WhatsApp pour finaliser votre demande de devis.</span>
+          <strong>Demande prête</strong>
+          <span>WhatsApp s'ouvre avec votre demande : il ne reste qu'à l'envoyer.</span>
         </div>
       </div>
     </form>
@@ -546,23 +475,19 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="footer-brand">
-      <a href="#home" class="brand brand-footer">
-        <img src="logo-mark.svg" width="60" height="60" alt="GRILVEX">
-        <span class="brand-text">
-          <strong>GRILVEX</strong>
-          <em>GRILLAGE &amp; CRIBLAGE</em>
-        </span>
+      <a href="#home" class="brand" aria-label="GRILVEX — Accueil">
+        <img src="logo-mark.svg" width="52" height="52" alt="">
+        <span class="brand-name">GRILVEX</span>
       </a>
-      <p>GRILVEX : votre partenaire de confiance pour le grillage industriel et le criblage sur mesure au Maroc. Une expertise métallurgique au service de vos cadences de production.</p>
+      <p>Votre partenaire pour le grillage industriel et le criblage sur mesure au Maroc.</p>
     </div>
 
     <div class="footer-col">
       <h4>Navigation</h4>
-      <a href="#home">Accueil</a>
       <a href="#catalogue">Catalogue</a>
       <a href="#configurateur">Configurateur</a>
       <a href="#apropos">À propos</a>
-      <a href="#faq">FAQ</a>
+      <a href="#faq">Questions fréquentes</a>
       <a href="#contact">Contact</a>
     </div>
 
@@ -570,14 +495,14 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
       <h4>Contact</h4>
       <a href="tel:+212668880667">+212 668 880 667</a>
       <a href="mailto:contact@grilvex.com">contact@grilvex.com</a>
-      <span class="footer-static">Zone industrielle Tit Mellil, Casablanca</span>
+      <span>Zone industrielle Tit Mellil, Casablanca</span>
     </div>
 
     <div class="footer-col footer-news">
       <h4>Newsletter</h4>
-      <p>Nouveautés catalogue &amp; disponibilités stock.</p>
+      <p>Nouveautés catalogue et disponibilités stock.</p>
       <form class="news-form" id="newsForm">
-        <input type="email" placeholder="contact@grilvex.com" required>
+        <input type="email" placeholder="Votre email" aria-label="Votre email" required>
         <button type="submit" aria-label="S'abonner">
           <svg viewBox="0 0 24 24" class="ic"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
@@ -589,15 +514,18 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
       </div>
     </div>
   </div>
+
+  <div class="footer-word" aria-hidden="true">GRILVEX</div>
+
   <div class="footer-bottom">
     <div class="wrap footer-bottom-inner">
-      <span>© <span id="year"></span> GRILVEX  — grilvex.ma — Tous droits réservés.</span>
-      <span>Conçu avec précision, tissé avec rigueur.</span>
+      <span>© <span id="year"></span> GRILVEX — grilvex.ma — Tous droits réservés.</span>
+      <span>Grillage et criblage industriel, Casablanca.</span>
     </div>
   </div>
 </footer>
 
-<!-- ============ FLOATING ACTIONS ============ -->
+<!-- ============ BOUTONS FLOTTANTS ============ -->
 <a href="#" class="whatsapp-fab" id="whatsappFab" aria-label="Contacter sur WhatsApp" target="_blank" rel="noopener">
   <svg class="ic" viewBox="0 0 32 32" aria-hidden="true">
     <path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.386.703 4.605 1.912 6.472L4 29l7.75-1.912A11.94 11.94 0 0 0 16.001 27C22.628 27 28 21.627 28 15S22.627 3 16.001 3zm5.273 13.41c-.29-.145-1.71-.844-1.975-.94-.265-.097-.458-.145-.65.145-.193.29-.747.94-.916 1.133-.169.193-.338.217-.628.072-.29-.145-1.223-.451-2.33-1.437-.861-.768-1.443-1.716-1.612-2.006-.169-.29-.018-.447.127-.591.13-.13.29-.338.435-.507.145-.169.193-.29.29-.483.096-.193.048-.362-.024-.507-.072-.145-.65-1.567-.89-2.146-.234-.564-.472-.487-.65-.496a11.6 11.6 0 0 0-.555-.01 1.065 1.065 0 0 0-.772.362c-.265.29-1.01.987-1.01 2.408 0 1.42 1.035 2.792 1.18 2.985.145.193 2.035 3.106 4.93 4.354.689.297 1.226.474 1.645.607.691.22 1.32.189 1.818.115.554-.083 1.71-.699 1.951-1.373.241-.674.241-1.252.169-1.373-.072-.121-.265-.193-.555-.338z"/>
@@ -605,13 +533,10 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
 </a>
 
 <button class="back-to-top" id="backToTop" aria-label="Retour en haut">
-  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M12 18.5V6"/>
-    <path d="M6.5 11.5 12 6l5.5 5.5"/>
-  </svg>
+  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"/><path d="M5.5 11.5 12 5l6.5 6.5"/></svg>
 </button>
 
-<!-- ============ PRODUCT MODAL ============ -->
+<!-- ============ MODALE PRODUIT ============ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="modal-close" id="modalClose" aria-label="Fermer">
@@ -623,7 +548,7 @@ Atouts majeurs : Une équipe qualifiée, intègre et expérimentée, garantissan
       <h3 id="modalTitle"></h3>
       <p id="modalDesc"></p>
       <div class="modal-specs" id="modalSpecs"></div>
-      <a href="#contact" class="btn btn-primary btn-block" id="modalCta">Demander un devis pour ce produit</a>
+      <a href="#contact" class="btn btn-orange btn-block" id="modalCta">Demander un devis pour ce produit</a>
     </div>
   </div>
 </div>
