@@ -593,4 +593,69 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+
+  /* ---------------------------------------------------
+     16. HERO : fond en carrousel (3 s) + indicateurs
+  --------------------------------------------------- */
+  const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
+  const heroDots = document.getElementById('heroDots');
+  if (heroSlides.length > 1 && heroDots) {
+    const SLIDE_MS = 3000;
+    let cur = 0, timer = null;
+    const dots = heroSlides.map((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'hero-dot'; b.setAttribute('aria-label', 'Image ' + (i + 1));
+      b.addEventListener('click', () => { show(i); restart(); });
+      heroDots.appendChild(b); return b;
+    });
+    const show = (i) => {
+      cur = (i + heroSlides.length) % heroSlides.length;
+      heroSlides.forEach((s, k) => s.classList.toggle('active', k === cur));
+      dots.forEach((d, k) => { d.classList.toggle('done', k < cur); d.classList.remove('active'); });
+      void heroDots.offsetWidth; dots[cur].classList.add('active');
+    };
+    const restart = () => { clearInterval(timer); timer = setInterval(() => show(cur + 1), SLIDE_MS); };
+    heroSlides.forEach(s => { const m = /url\(['"]?(.*?)['"]?\)/.exec(s.style.backgroundImage); if (m) new Image().src = m[1]; });
+    show(0); restart();
+    document.addEventListener('visibilitychange', () => { if (document.hidden) clearInterval(timer); else { show(cur); restart(); } });
+  }
+
+  /* ---------------------------------------------------
+     17. WOW : barre de progression, apparitions, halo des cartes
+  --------------------------------------------------- */
+  const bar = document.createElement('div');
+  bar.className = 'progress'; document.body.appendChild(bar);
+  let barTick = false;
+  window.addEventListener('scroll', () => {
+    if (barTick) return; barTick = true;
+    requestAnimationFrame(() => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(scrollY / max, 1) : 0) + ')';
+      barTick = false;
+    });
+  }, { passive: true });
+
+  document.documentElement.classList.add('js');
+  const revealSel = '.section-head,.config-intro>*,.config-preview,.why-intro>*,.why-row,.apropos-frame,.apropos-copy>*,.fact,.faq-layout>div:first-child>*,.faq-item,.contact-intro>*,.contact-card,.quote-form,.cat-card,.spec-strip>div';
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const el = en.target; io.unobserve(el);
+      el.classList.add('in');
+      setTimeout(() => el.classList.remove('rv', 'in'), 1100 + parseFloat(el.style.getPropertyValue('--d') || 0) * 1000);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll(revealSel).forEach(el => {
+    const sibs = Array.from(el.parentElement.children).filter(n => n.matches(revealSel));
+    el.style.setProperty('--d', (Math.min(sibs.indexOf(el), 6) * 0.08) + 's');
+    el.classList.add('rv'); io.observe(el);
+  });
+
+  catGrid.addEventListener('pointermove', (e) => {
+    const card = e.target.closest('.cat-card'); if (!card) return;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
+
 });
