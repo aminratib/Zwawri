@@ -122,9 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       ctx.lineCap = 'round';
       ctx.lineWidth = 1.6;
-      ctx.strokeStyle = 'rgba(10,34,56,' + (0.17 * alphaH) + ')';
+      ctx.strokeStyle = 'rgba(255,255,255,' + (0.09 * alphaH) + ')';
       ctx.stroke(baseH);
-      ctx.strokeStyle = 'rgba(10,34,56,' + (0.17 * alphaV) + ')';
+      ctx.strokeStyle = 'rgba(255,255,255,' + (0.09 * alphaV) + ')';
       ctx.stroke(baseV);
       ctx.lineWidth = 2.6;
       ctx.strokeStyle = 'rgba(255,90,31,' + (0.95 * alphaV) + ')';
