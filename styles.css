@@ -310,3 +310,41 @@ details summary{list-style:none}details summary::-webkit-details-marker{display:
 .why-row:hover .why-icon{background:var(--orange);stroke:#fff;transform:rotate(-8deg) scale(1.1);box-shadow:0 10px 22px rgba(255,104,0,.4)}
 .contact-card:hover{transform:translateX(8px)}
 @media(hover:none){.cat-card:hover{--ty:0px}}
+
+/* ===== MOBILE : suppression du carré bleu au toucher + retour tactile fluide ===== */
+/* 1) Supprime le "tap highlight" natif (carré bleu/gris) sur tous les éléments */
+*,*::before,*::after{-webkit-tap-highlight-color:transparent}
+a,button,summary,input,textarea,label,[tabindex]{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+/* supprime le double-tap zoom / délai de 300 ms sur les éléments cliquables */
+a,button,summary,.cat-card,.chip,label{touch-action:manipulation}
+/* le focus au toucher ne dessine plus de cadre ; il reste visible au clavier (:focus-visible) */
+a:focus:not(:focus-visible),button:focus:not(:focus-visible),summary:focus:not(:focus-visible),.cat-card:focus:not(:focus-visible){outline:0}
+
+/* 2) Retour tactile doux : léger enfoncement + éclaircissement, avec transition fluide */
+@media(hover:none){
+  a,button,summary,.cat-card,.chip,.contact-card,.why-row,.faq-item summary{
+    transition:transform .28s cubic-bezier(.2,.7,.2,1),background-color .28s ease,color .28s ease,border-color .28s ease,box-shadow .28s ease,opacity .28s ease,filter .28s ease
+  }
+  .btn:active{transform:scale(.96);filter:brightness(1.08)}
+  .btn-orange:active{background:var(--orange2);box-shadow:0 4px 12px rgba(255,104,0,.4)}
+  .btn-line:active{background:var(--navy);color:#fff}
+  .hero .btn-line:active,.mobile-menu .btn-line:active{background:#fff;color:var(--navy)}
+  .chip:active{transform:scale(.95);border-color:var(--orange);color:var(--orange)}
+  .chip[aria-pressed="true"]:active{color:#fff}
+  .burger:active{transform:scale(.92);background:rgba(255,255,255,.2)}
+  .mobile-link:active{color:var(--orange);transform:translateX(8px)}
+  .nav-link:active{color:#fff}
+  .carousel-arrow:active,.modal-close:active{transform:scale(.88);background:var(--orange);color:#fff}
+  .modal-close:active svg{stroke:#fff}
+  .cat-card:active{transform:scale(.975);box-shadow:0 8px 20px rgba(10,31,46,.14);border-color:rgba(255,104,0,.45)}
+  .cat-card:active .cat-more{background:var(--orange);color:#fff}
+  .contact-card:active{transform:scale(.97);background:rgba(255,255,255,.14);border-color:var(--orange)}
+  .why-row:active{transform:scale(.98);border-color:var(--orange)}
+  .faq-item summary:active{background:rgba(255,104,0,.07);border-radius:16px}
+  .footer-col a:active{color:var(--orange)}
+  .footer-social a:active,.news-form button:active{transform:scale(.9);background:var(--orange)}
+  .whatsapp-fab:active{transform:scale(.92)}
+  .back-to-top:active{transform:scale(.9);background:var(--orange)}
+  .selected-product-tag button:active{transform:scale(.85)}
+}
+@media(prefers-reduced-motion:reduce){a:active,button:active,summary:active,.cat-card:active{transform:none!important}}
