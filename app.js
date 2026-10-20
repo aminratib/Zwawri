@@ -61,111 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------------------------------------------------
-     4. HERO MESH CANVAS (maille vivante)
-  --------------------------------------------------- */
-  const meshCanvas = document.getElementById('meshCanvas');
-  if (meshCanvas) {
-    const hero = meshCanvas.parentElement;
-    const ctx = meshCanvas.getContext('2d');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const GAP = 34;      // espacement des fils
-    const STEP = 12;     // pas d'échantillonnage le long d'un fil
-    const RADIUS = 190;  // zone d'influence du pointeur
-    const PUSH = 30;     // déformation maximale en px
-    let W = 0, H = 0, running = false, startTime = performance.now();
-    const ptr = { x: -9999, y: -9999, tx: -9999, ty: -9999, active: false, init: false };
-
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = hero.clientWidth; H = hero.clientHeight;
-      meshCanvas.width = Math.round(W * dpr);
-      meshCanvas.height = Math.round(H * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    // renvoie [x, y, force] : position déformée d'un point de la maille
-    const warp = (x, y) => {
-      const dx = x - ptr.x, dy = y - ptr.y;
-      const d = Math.hypot(dx, dy);
-      if (d >= RADIUS || d === 0) return [x, y, 0];
-      const f = Math.pow(1 - d / RADIUS, 2);
-      return [x + (dx / d) * f * PUSH, y + (dy / d) * f * PUSH, f];
-    };
-
-    const draw = (now) => {
-      ctx.clearRect(0, 0, W, H);
-      const t = reduceMotion ? 1 : Math.min((now - startTime) / 1500, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      const alphaH = Math.min(eased * 2, 1);          // les fils horizontaux se posent d'abord
-      const alphaV = Math.max(eased * 2 - 1, 0);      // puis les fils verticaux
-      const hot = new Path2D();
-      const baseH = new Path2D();
-      const baseV = new Path2D();
-
-      const trace = (horizontal, base) => {
-        const lim = horizontal ? H : W, len = horizontal ? W : H;
-        for (let k = GAP / 2; k < lim; k += GAP) {
-          let prev = null;
-          for (let s = -STEP; s <= len + STEP; s += STEP) {
-            const p = horizontal ? warp(s, k) : warp(k, s);
-            if (prev) {
-              base.moveTo(prev[0], prev[1]);
-              base.lineTo(p[0], p[1]);
-              if (prev[2] > 0.04 || p[2] > 0.04) { hot.moveTo(prev[0], prev[1]); hot.lineTo(p[0], p[1]); }
-            }
-            prev = p;
-          }
-        }
-      };
-      trace(true, baseH);
-      trace(false, baseV);
-
-      ctx.lineCap = 'round';
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = 'rgba(255,255,255,' + (0.09 * alphaH) + ')';
-      ctx.stroke(baseH);
-      ctx.strokeStyle = 'rgba(255,255,255,' + (0.09 * alphaV) + ')';
-      ctx.stroke(baseV);
-      ctx.lineWidth = 2.6;
-      ctx.strokeStyle = 'rgba(255,90,31,' + (0.95 * alphaV) + ')';
-      ctx.stroke(hot);
-    };
-
-    const frame = (now) => {
-      if (!running) return;
-      if (!ptr.active) {
-        // sans pointeur (mobile, début de page) : un point de pression se promène sur la maille
-        ptr.tx = W * (0.5 + 0.32 * Math.cos(now * 0.00045));
-        ptr.ty = H * (0.5 + 0.28 * Math.sin(now * 0.0006));
-      }
-      if (!ptr.init) { ptr.x = ptr.tx; ptr.y = ptr.ty; ptr.init = true; }
-      ptr.x += (ptr.tx - ptr.x) * 0.12;
-      ptr.y += (ptr.ty - ptr.y) * 0.12;
-      draw(now);
-      requestAnimationFrame(frame);
-    };
-
-    resize();
-    window.addEventListener('resize', () => { resize(); if (!running) draw(performance.now()); });
-
-    if (reduceMotion) {
-      draw(performance.now());
-    } else {
-      hero.addEventListener('pointermove', (e) => {
-        const r = hero.getBoundingClientRect();
-        ptr.tx = e.clientX - r.left; ptr.ty = e.clientY - r.top; ptr.active = true;
-        if (!ptr.init) { ptr.x = ptr.tx; ptr.y = ptr.ty; ptr.init = true; }
-      });
-      hero.addEventListener('pointerleave', () => { ptr.active = false; });
-      new IntersectionObserver((entries) => {
-        const on = entries[0].isIntersecting;
-        if (on && !running) { running = true; requestAnimationFrame(frame); }
-        else if (!on) { running = false; }
-      }, { threshold: 0 }).observe(hero);
-    }
-  }
-
-  /* ---------------------------------------------------
      5. CATALOGUE DATA + RENDER
   --------------------------------------------------- */
   const categories = [
@@ -651,11 +546,41 @@ document.addEventListener('DOMContentLoaded', () => {
     el.classList.add('rv'); io.observe(el);
   });
 
-  catGrid.addEventListener('pointermove', (e) => {
-    const card = e.target.closest('.cat-card'); if (!card) return;
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-  });
+  /* Cartes : inclinaison 3D + halo qui suit le curseur (souris uniquement, 1 mise à jour / frame) */
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let raf = 0, pending = null;
+    catGrid.addEventListener('pointermove', (e) => {
+      const card = e.target.closest('.cat-card'); if (!card) return;
+      pending = { card, x: e.clientX, y: e.clientY };
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const { card, x, y } = pending, r = card.getBoundingClientRect();
+        const px = (x - r.left) / r.width, py = (y - r.top) / r.height;
+        card.classList.add('tilting');
+        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+        card.style.setProperty('--rx', ((0.5 - py) * 7).toFixed(2) + 'deg');
+        card.style.setProperty('--ry', ((px - 0.5) * 9).toFixed(2) + 'deg');
+      });
+    });
+    catGrid.addEventListener('pointerout', (e) => {
+      const card = e.target.closest('.cat-card');
+      if (card && !card.contains(e.relatedTarget)) {
+        card.classList.remove('tilting');
+        card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg');
+      }
+    });
+  }
+
+  /* Navbar : se masque en descendant, réapparaît en remontant */
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY, d = y - lastY;
+    if (Math.abs(d) < 8) return;
+    const menuOpen = document.querySelector('.mobile-menu.open');
+    header.classList.toggle('hide', d > 0 && y > 520 && !menuOpen);
+    lastY = y;
+  }, { passive: true });
 
 });

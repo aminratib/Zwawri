@@ -54,7 +54,6 @@ details summary{list-style:none}details summary::-webkit-details-marker{display:
 
 /* Hero */
 .hero{position:relative;overflow:hidden;color:#fff;padding-top:150px;background:radial-gradient(900px 500px at 85% 20%,rgba(255,104,0,.22),transparent 60%),linear-gradient(160deg,#0f2b40,var(--navy) 60%)}
-.hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
 .hero-kicker{display:flex;align-items:center;gap:12px;color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:20px}
 .hero-kicker::before{content:"";width:30px;height:3px;background:var(--orange);border-radius:2px;flex:none}
@@ -275,3 +274,39 @@ details summary{list-style:none}details summary::-webkit-details-marker{display:
 .fact,.readout-item{transition:.3s}.fact:hover{transform:translateY(-6px) rotate(-1deg)}
 @media(max-width:960px){.hero-photo{animation:none}.hero-dots{margin-top:26px}.hero-slide.active{transform:scale(1.12)}}
 @media(prefers-reduced-motion:reduce){.hero-slide{transition:opacity .01s}.js .rv{opacity:1;transform:none}}
+
+/* ===== NAVBAR transparente, fondue dans le carrousel ===== */
+.site-header{border-bottom:1px solid transparent;transition:transform .55s cubic-bezier(.2,.7,.2,1),box-shadow .5s,border-color .5s}
+.site-header::before{background:linear-gradient(180deg,rgba(6,17,27,.5),rgba(6,17,27,0));-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:background .5s,backdrop-filter .5s,-webkit-backdrop-filter .5s}
+.site-header.scrolled{border-bottom-color:rgba(255,255,255,.08)}
+.site-header.scrolled::before{background:rgba(10,31,46,.74);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4)}
+.site-header.hide:not(:focus-within){transform:translateY(-100%)}
+.site-header:not(.scrolled) .nav-link,.site-header:not(.scrolled) .brand-name,.site-header:not(.scrolled) .nav-tel{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+.hero-bg::after{background:linear-gradient(180deg,rgba(6,17,27,.55),transparent 24%),linear-gradient(100deg,rgba(10,31,46,.92) 0%,rgba(10,31,46,.72) 45%,rgba(10,31,46,.38) 100%),linear-gradient(0deg,rgba(10,31,46,.9),transparent 35%)}
+
+/* ===== CARTES modernes ===== */
+.cat-grid{counter-reset:card}
+.cat-card{counter-increment:card;transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));transition:transform .55s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s;backface-visibility:hidden}
+.cat-card:hover{--ty:-10px;border-color:rgba(255,104,0,.5);box-shadow:0 32px 60px rgba(10,31,46,.22),0 0 0 1px rgba(255,104,0,.25)}
+.cat-card.tilting{transition:transform .12s linear,box-shadow .4s,border-color .4s}
+.cat-card::after{background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(255,104,0,.14),transparent 62%)}
+.cat-card-photo{overflow:hidden}
+.cat-card-photo::before{content:counter(card,decimal-leading-zero);position:absolute;z-index:4;top:14px;left:14px;padding:5px 12px;border-radius:99px;font-weight:800;font-size:.72rem;letter-spacing:.1em;color:#fff;background:rgba(10,31,46,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);transition:.4s}
+.cat-card:hover .cat-card-photo::before{background:var(--orange);border-color:var(--orange);transform:scale(1.08)}
+.carousel-card::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%);transform:translateX(-130%);transition:transform .9s}
+.cat-card:hover .carousel-card::after{transform:translateX(130%)}
+.carousel-arrow,.carousel-dots{z-index:4}
+.cat-mat{align-self:flex-start;padding:4px 11px;border-radius:99px;background:rgba(255,104,0,.1)}
+.cat-card h3{position:relative;padding-bottom:12px;margin-bottom:10px}
+.cat-card h3::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:26px;border-radius:2px;background:var(--orange);transition:width .5s cubic-bezier(.2,.7,.2,1)}
+.cat-card:hover h3::after{width:70px}
+.cat-card p{margin-bottom:18px}
+.cat-more{align-self:flex-start;padding:9px 16px;border-radius:99px;background:rgba(10,31,46,.06);color:var(--navy);transition:background .35s,color .35s,padding .35s}
+.cat-card:hover .cat-more{background:var(--orange);color:#fff;padding-right:20px;box-shadow:0 8px 20px rgba(255,104,0,.35)}
+.js .cat-card.rv{transform:translateY(46px) scale(.94)}
+.js .cat-card.rv.in{transform:none}
+.cat-card:active{--ty:0px;transform:scale(.98)}
+.why-icon{transition:.45s cubic-bezier(.2,.7,.2,1)}
+.why-row:hover .why-icon{background:var(--orange);stroke:#fff;transform:rotate(-8deg) scale(1.1);box-shadow:0 10px 22px rgba(255,104,0,.4)}
+.contact-card:hover{transform:translateX(8px)}
+@media(hover:none){.cat-card:hover{--ty:0px}}
